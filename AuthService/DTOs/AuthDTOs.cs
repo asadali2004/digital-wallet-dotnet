@@ -19,6 +19,24 @@ public class RegisterRequestDto
     public string Password { get; set; } = string.Empty;
 }
 
+public class AdminRegisterRequestDto
+{
+    [Required(ErrorMessage = "Email is required.")]
+    [EmailAddress(ErrorMessage = "Invalid email format.")]
+    public string Email { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Phone number is required.")]
+    [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone must be exactly 10 digits.")]
+    public string PhoneNumber { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Password is required.")]
+    [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
+    public string Password { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Admin secret key is required.")]
+    public string AdminSecretKey { get; set; } = string.Empty;
+}
+
 public class LoginRequestDto
 {
     [Required(ErrorMessage = "Email is required.")]

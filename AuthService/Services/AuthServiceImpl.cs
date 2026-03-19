@@ -21,11 +21,13 @@ public class AuthServiceImpl : IAuthService
 {
     private readonly IAuthRepository _repo;
     private readonly JwtSettings _jwt;
+    private readonly IConfiguration _configuration;
 
-    public AuthServiceImpl(IAuthRepository repo, IOptions<JwtSettings> jwt)
+    public AuthServiceImpl(IAuthRepository repo, IOptions<JwtSettings> jwt, IConfiguration configuration)
     {
         _repo = repo;
         _jwt = jwt.Value;
+        _configuration = configuration;
     }
 
     public async Task<(bool Success, string Message)> RegisterAsync(RegisterRequestDto dto)
@@ -52,6 +54,34 @@ public class AuthServiceImpl : IAuthService
         return (true, "Registration successful.");
     }
 
+    public async Task<(bool Success, string Message)> RegisterAdminAsync(AdminRegisterRequestDto dto)
+    {
+        // Validate secret key
+        var expectedKey = _configuration["AdminSettings:SecretKey"];
+        if (dto.AdminSecretKey != expectedKey)
+            return (false, "Invalid admin secret key.");
+
+        if (await _repo.EmailExistsAsync(dto.Email))
+            return (false, "Email already registered.");
+
+        if (await _repo.PhoneExistsAsync(dto.PhoneNumber))
+            return (false, "Phone number already registered.");
+
+        var user = new User
+        {
+            Email = dto.Email,
+            PhoneNumber = dto.PhoneNumber,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = "Admin",    
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _repo.AddUserAsync(user);
+        await _repo.SaveChangesAsync();
+
+        return (true, "Admin registered successfully.");
+    }
     public async Task<(bool Success, AuthResponseDto? Data, string Message)> LoginAsync(LoginRequestDto dto)
     {
         var user = await _repo.GetByEmailAsync(dto.Email);
