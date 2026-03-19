@@ -1,0 +1,23 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Environment & secrets
+appsettings.Development.json
+*.env
+
+# EF Migrations (we'll add later)
+# Migrations/
+
+# Node (for Angular later)
+node_modules/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="AdminService/AdminService.csproj" />
+  <Project Path="ApiGateway/ApiGateway.csproj" />
+  <Project Path="AuthService/AuthService.csproj" />
+  <Project Path="NotificationService/NotificationService.csproj" />
+  <Project Path="RewardsService/RewardsService.csproj" />
+  <Project Path="Shared.Events/Shared.Events.csproj" />
+  <Project Path="UserService/UserService.csproj" />
+  <Project Path="WalletService/WalletService.csproj" />
+</Solution>
