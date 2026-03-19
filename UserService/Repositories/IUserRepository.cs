@@ -1,0 +1,16 @@
+﻿using UserService.Models;
+
+namespace UserService.Repositories;
+
+public interface IUserRepository
+{
+    Task<UserProfile?> GetProfileByAuthUserIdAsync(int authUserId);
+    Task<bool> ProfileExistsAsync(int authUserId);
+    Task AddProfileAsync(UserProfile profile);
+
+    Task<KycSubmission?> GetKycByAuthUserIdAsync(int authUserId);
+    Task<bool> KycExistsAsync(int authUserId);
+    Task AddKycAsync(KycSubmission kyc);
+
+    Task SaveChangesAsync();
+}
